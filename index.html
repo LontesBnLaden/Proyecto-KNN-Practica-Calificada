@@ -1,0 +1,218 @@
+﻿<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Proyecto educativo para aprender el algoritmo KNN con dos practicas calificadas." />
+    <title>KNN | Practica Calificada</title>
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <header class="hero" id="inicio">
+      <nav class="nav" aria-label="Navegacion principal">
+        <a class="brand" href="#inicio" aria-label="Ir al inicio">
+          <span class="brand-mark">K</span>
+          <span>KNN<span class="brand-dot">.</span></span>
+        </a>
+        <button class="menu-button" type="button" aria-label="Abrir menu" aria-expanded="false">&#9776;</button>
+        <div class="nav-links">
+          <a href="#teoria">Teoria</a>
+          <a href="#practicas">Practicas</a>
+          <a href="#automatizacion">Automatizacion</a>
+        </div>
+      </nav>
+
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">Práctica calificada · Inteligencia artificial</p>
+          <h1>Clasifica con el poder de <span>KNN</span></h1>
+          <p class="hero-text">
+            Aprende y aplica el algoritmo de los K vecinos mas cercanos para
+            resolver problemas de prediccion de forma visual e interactiva.
+          </p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#practicas">Iniciar practica</a>
+            <a class="button button-secondary" href="#teoria">Ver conceptos</a>
+          </div>
+        </div>
+
+        <div class="visual-card" aria-label="Representacion visual de vecinos cercanos">
+          <div class="grid-plane"></div>
+          <div class="point point-a"></div>
+          <div class="point point-b"></div>
+          <div class="point point-c"></div>
+          <div class="point point-d"></div>
+          <div class="point point-e"></div>
+          <div class="query-point">?</div>
+          <div class="orbit orbit-one"></div>
+          <div class="orbit orbit-two"></div>
+          <div class="knn-badge">
+            <strong id="heroK">3</strong>
+            <span>vecinos</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="theory section" id="teoria">
+        <div class="section-heading">
+          <p class="eyebrow">Fundamentos</p>
+          <h2>¿Cómo funciona KNN?</h2>
+        </div>
+        <div class="steps">
+          <article class="step-card">
+            <span class="step-number">01</span>
+            <div class="step-icon">R</div>
+            <h3>Recibe datos</h3>
+            <p>El algoritmo recibe las caracteristicas de un caso nuevo.</p>
+          </article>
+          <article class="step-card">
+            <span class="step-number">02</span>
+            <div class="step-icon">D</div>
+            <h3>Calcula distancias</h3>
+            <p>Mide que tan cerca esta el nuevo caso de los datos conocidos.</p>
+          </article>
+          <article class="step-card">
+            <span class="step-number">03</span>
+            <div class="step-icon">V</div>
+            <h3>Encuentra vecinos</h3>
+            <p>Selecciona los K registros con menor distancia.</p>
+          </article>
+          <article class="step-card">
+            <span class="step-number">04</span>
+            <div class="step-icon">C</div>
+            <h3>Clasifica</h3>
+            <p>Asigna la categoria mas frecuente entre sus vecinos.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="practices section" id="practicas">
+        <div class="section-heading">
+          <p class="eyebrow">Ejercicios interactivos</p>
+          <h2>Practicas calificadas</h2>
+        </div>
+
+        <div class="practice-grid">
+          <article class="practice-card">
+            <div class="practice-head">
+              <span class="practice-number">1</span>
+              <div>
+                <p>Clasificacion binaria</p>
+                <h3>Satisfaccion del cliente</h3>
+              </div>
+            </div>
+            <p class="practice-description">
+              Predice si un cliente quedara satisfecho segun su puntaje de
+              atencion y el tiempo empleado en la solucion.
+            </p>
+            <form id="clientForm" class="form">
+              <label>
+                Puntaje de atencion
+                <span class="input-wrap">
+                  <input id="attention" type="number" min="1" max="10" value="8" required />
+                  <span>/10</span>
+                </span>
+              </label>
+              <label>
+                Tiempo de respuesta
+                <span class="input-wrap">
+                  <input id="responseTime" type="number" min="0" max="60" value="12" required />
+                  <span>min</span>
+                </span>
+              </label>
+              <button class="button button-primary" type="submit">Predecir</button>
+            </form>
+            <div class="result" id="clientResult" aria-live="polite">
+              <span>Resultado</span>
+              <strong>Listo para calcular</strong>
+            </div>
+          </article>
+
+          <article class="practice-card">
+            <div class="practice-head">
+              <span class="practice-number">2</span>
+              <div>
+                <p>Clasificacion binaria</p>
+                <h3>Decision de inversion</h3>
+              </div>
+            </div>
+            <p class="practice-description">
+              Estima si un empresario invertira segun el beneficio esperado
+              y el nivel de riesgo del proyecto.
+            </p>
+            <form id="investmentForm" class="form">
+              <label>
+                Beneficio esperado
+                <span class="input-wrap">
+                  <input id="profit" type="number" min="0" max="100" value="75" required />
+                  <span>%</span>
+                </span>
+              </label>
+              <label>
+                Riesgo percibido
+                <span class="input-wrap">
+                  <input id="risk" type="number" min="0" max="100" value="25" required />
+                  <span>/100</span>
+                </span>
+              </label>
+              <button class="button button-primary" type="submit">Predecir</button>
+            </form>
+            <div class="result" id="investmentResult" aria-live="polite">
+              <span>Resultado</span>
+              <strong>Listo para calcular</strong>
+            </div>
+          </article>
+        </div>
+
+        <div class="config-bar">
+          <label for="kValue">Cantidad de vecinos (K)</label>
+          <input id="kValue" type="range" min="1" max="7" value="3" step="1" />
+          <output id="kOutput" for="kValue">3 vecinos</output>
+        </div>
+      </section>
+
+      <section class="automation section" id="automatizacion">
+        <div class="automation-copy">
+          <p class="eyebrow">Aplicacion real</p>
+          <h2>Automatiza procesos con inteligencia artificial</h2>
+          <p>
+            KNN puede apoyar decisiones rapidas como clasificar solicitudes,
+            detectar patrones, apoyar recomendaciones y reducir tareas
+            repetitivas en el desarrollo de software.
+          </p>
+          <a class="button button-primary" href="#inicio">Volver al inicio</a>
+        </div>
+        <div class="automation-panel">
+          <div class="panel-row">
+            <span class="panel-icon">01</span>
+            <span>Entrada de datos</span>
+            <span class="status">Listo</span>
+          </div>
+          <div class="panel-row">
+            <span class="panel-icon">02</span>
+            <span>Calculo de distancias</span>
+            <span class="status">Listo</span>
+          </div>
+          <div class="panel-row">
+            <span class="panel-icon">03</span>
+            <span>Clasificacion automatica</span>
+            <span class="status">Listo</span>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <a class="brand" href="#inicio">
+        <span class="brand-mark">K</span>
+        <span>KNN<span class="brand-dot">.</span></span>
+      </a>
+      <p>Práctica calificada · Proyecto educativo</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+  </body>
+</html>
+
