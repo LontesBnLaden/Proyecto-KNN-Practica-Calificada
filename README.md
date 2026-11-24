@@ -3,15 +3,11 @@
 Proyecto web educativo que presenta el algoritmo de los K vecinos mas cercanos
 (KNN) y dos practicas calificadas interactivas.
 
-## Abrir el proyecto
+## Ejecutar el proyecto
 
-Abre `index.html` directamente en el navegador o ejecuta desde esta carpeta:
-
-```powershell
-python -m http.server 5500
-```
-
-Luego visita `http://localhost:5500`.
+Para que el frontend y las predicciones funcionen juntos, usa la aplicación
+Flask de Python. No basta con abrir `index.html` directamente, porque las
+predicciones requieren la API del servidor.
 
 ## Versión Python
 
@@ -44,3 +40,7 @@ Pandas y scikit-learn en el servidor. Matplotlib genera gráficas disponibles en
 
 - `http://localhost:5050/api/plot/client`
 - `http://localhost:5050/api/plot/investment`
+
+La aplicación web incluye validación de rangos, normalización con
+`StandardScaler`, vecinos cercanos, distancia normalizada, confianza,
+probabilidades por clase y gráficas actualizadas con el nuevo caso.

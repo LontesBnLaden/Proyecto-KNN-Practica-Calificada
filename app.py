@@ -55,7 +55,7 @@ def get_investment_dataset() -> pd.DataFrame:
 
 
 def predict(dataframe: pd.DataFrame, feature_columns: list[str],
-            point: list[float], k: int) -> str:
+            point: list[float], k: int) -> dict:
     scaler = StandardScaler()
     features = dataframe[feature_columns]
     scaled_features = scaler.fit_transform(features)
@@ -65,7 +65,50 @@ def predict(dataframe: pd.DataFrame, feature_columns: list[str],
 
     model = KNeighborsClassifier(n_neighbors=k)
     model.fit(scaled_features, dataframe["Resultado"])
-    return str(model.predict(scaled_point)[0])
+    prediction = str(model.predict(scaled_point)[0])
+    probabilities = model.predict_proba(scaled_point)[0]
+    probability_by_label = {
+        str(label): round(float(probability) * 100, 1)
+        for label, probability in zip(model.classes_, probabilities)
+    }
+    counts = dataframe["Resultado"].value_counts()
+    neighbor_distances, neighbor_indices = model.kneighbors(scaled_point)
+
+    neighbors = []
+    for distance, index in zip(
+        neighbor_distances[0], neighbor_indices[0]
+    ):
+        neighbors.append({
+            "values": [
+                float(dataframe.iloc[index][column])
+                for column in feature_columns
+            ],
+            "label": str(dataframe.iloc[index]["Resultado"]),
+            "distance": round(float(distance), 4),
+        })
+
+    return {
+        "prediction": prediction,
+        "confidence": probability_by_label[prediction],
+        "probabilities": probability_by_label,
+        "neighbors": neighbors,
+        "training_accuracy": round(
+            float(model.score(scaled_features, dataframe["Resultado"])) * 100,
+            1,
+        ),
+        "dataset_size": int(len(dataframe)),
+        "class_counts": {
+            str(label): int(count) for label, count in counts.items()
+        },
+    }
+
+
+@app.route("/api/health")
+def health():
+    return jsonify({
+        "status": "ok",
+        "libraries": ["pandas", "scikit-learn", "matplotlib"],
+    })
 
 
 @app.route("/")
@@ -89,7 +132,10 @@ def api_predict():
 
     body = request.get_json(silent=True) or {}
     practice = body.get("practice")
-    k = int(body.get("k", 3))
+    try:
+        k = int(body.get("k", 3))
+    except (TypeError, ValueError):
+        return jsonify({"error": "El valor de K no es válido"}), 400
 
     if not 1 <= k <= 7:
         return jsonify({"error": "K debe estar entre 1 y 7"}), 400
@@ -112,12 +158,25 @@ def api_predict():
     except (KeyError, TypeError, ValueError):
         return jsonify({"error": "Datos de entrada no válidos"}), 400
 
+    if practice == "client":
+        if not 1 <= point[0] <= 10:
+            return jsonify({"error": "La atención debe estar entre 1 y 10"}), 400
+        if not 0 <= point[1] <= 60:
+            return jsonify({"error": "El tiempo debe estar entre 0 y 60"}), 400
+    else:
+        if not 0 <= point[0] <= 100:
+            return jsonify({"error": "El beneficio debe estar entre 0 y 100"}), 400
+        if not 0 <= point[1] <= 100:
+            return jsonify({"error": "El riesgo debe estar entre 0 y 100"}), 400
+
     result = predict(dataframe, columns, point, k)
-    return jsonify({"prediction": result, "k": k, "point": point})
+    return jsonify({"k": k, "point": point, **result})
 
 
 @app.route("/api/plot/<practice>")
 def api_plot(practice):
+    from flask import request
+
     if practice == "client":
         dataframe = get_client_dataset()
         columns = CLIENT_COLUMNS
@@ -142,6 +201,25 @@ def api_plot(practice):
     axis.set_title("Datos de entrenamiento - KNN")
     axis.grid(True, alpha=0.3)
     axis.legend()
+
+    try:
+        point_x = float(request.args.get("x"))
+        point_y = float(request.args.get("y"))
+        prediction = str(request.args.get("prediction", "Nuevo caso"))
+        axis.scatter(
+            [point_x],
+            [point_y],
+            marker="*",
+            s=220,
+            color="black",
+            edgecolor="white",
+            linewidth=1.5,
+            label=f"{prediction}",
+            zorder=5,
+        )
+        axis.legend()
+    except (TypeError, ValueError):
+        pass
     figure.tight_layout()
 
     output = BytesIO()

@@ -489,6 +489,37 @@ a {
   text-align: right;
 }
 
+.prediction-details {
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.prediction-details:empty {
+  display: none;
+}
+
+.prediction-details p {
+  margin: 4px 0;
+}
+
+.dataset-chart {
+  width: 100%;
+  aspect-ratio: 8 / 5;
+  margin-top: 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  object-fit: cover;
+  background: #f7fafc;
+}
+
+.form .button:disabled {
+  cursor: wait;
+  opacity: 0.65;
+  transform: none;
+}
+
 .config-bar {
   max-width: 620px;
   height: 68px;
